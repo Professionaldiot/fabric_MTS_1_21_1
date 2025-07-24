@@ -6,18 +6,27 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "5.1.+", changing: true
         classpath group: "org.parchmentmc", name: "librarian", version: "1.+"
         classpath group: "org.spongepowered", name: "mixingradle", version: "0.7.+"
+        classpath group: "com.mojang:minecraft:${project.minecraft_version}"
+        mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     }
 }
 
 //Apply plugins
-apply plugin: "net.minecraftforge.gradle"
-apply plugin: "org.parchmentmc.librarian.forgegradle"
-apply plugin: "eclipse"
-apply plugin: "org.spongepowered.mixin"
+// apply plugin: "net.minecraftforge.gradle"
+// apply plugin: "org.parchmentmc.librarian.forgegradle"
+// apply plugin: "eclipse"
+// apply plugin: "org.spongepowered.mixin"
 
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'com.mojang.gradle'
+    id 'fabric-loom' version "{loom_version}"
+    id 'org.spongepowered.mixin'
+}
 
 //Set file name.
 version = "${project.mc_version}-${project.mod_version}"
@@ -38,7 +47,7 @@ minecraft {
     // stable     #          Stables are built at the discretion of the MCP team.
     // official   MCVersion  Official field/method names from Mojang mapping files
     //mappings channel: "official", version: "1.18.2"
-    mappings channel: project.mappings_channel, version: "${project.mappings_version}-${project.mc_version}"
+    mappings channel: project.mappings_channel, version: "${project.yarn_mappings}-${project.mc_version}"
 
     //Run configurations.
     runs {
@@ -79,7 +88,7 @@ configurations {
 //Specify dependencies.
 dependencies {
     //Minecraft to use.
-    minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
     //Make mixin annotations actually do something
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 
